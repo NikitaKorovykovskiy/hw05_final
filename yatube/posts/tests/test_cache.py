@@ -32,3 +32,12 @@ class PostModelTest(TestCase):
         self.assertEqual(response.context.get('page_obj')[0], self.post)
         cache.clear()
         self.assertIsNot(response.context.get('page_obj')[0], self.post)
+
+    def test_cache_change(self):
+        """Тестирования изменения кеша"""
+        response = self.authorized_client.get(
+            reverse('posts:index')
+        )
+        Post.objects.filter(text='Текс исходный', author=self.user).last()
+        cache.clear()
+        self.assertIsNot(response.context.get('page_obj')[0], self.post)

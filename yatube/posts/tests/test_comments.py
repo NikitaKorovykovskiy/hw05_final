@@ -1,6 +1,7 @@
 from django.test import Client, TestCase
 from django.urls import reverse
-from posts.models import User, Post, Comment
+
+from posts.models import Comment, Post, User
 
 
 class CommentsTest(TestCase):
@@ -38,7 +39,7 @@ class CommentsTest(TestCase):
         self.assertEqual(comment.author, CommentsTest.user)
 
     def test_comment_show_on_profile(self):
-        """После отправки коммент показывается на старнице поста"""
+        """После отправки коммент показывается на странице поста"""
         comment_count = Comment.objects.count()
         form_data = {
             'text': 'Тестовый комментарий',
@@ -50,7 +51,9 @@ class CommentsTest(TestCase):
             data=form_data,
             follow=True,
         )
+        comment = Comment.objects.first()
         self.assertEqual(Comment.objects.count(), comment_count + 1)
         self.assertRedirects(response, reverse(
             'posts:post_detail', kwargs={'post_id': self.post.id}
         ))
+        self.assertEqual(comment.text, form_data['text'])

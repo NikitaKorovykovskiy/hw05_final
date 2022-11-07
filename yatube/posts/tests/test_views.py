@@ -1,12 +1,12 @@
-from django import forms
 import shutil
 import tempfile
 
+from django import forms
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
-from django.conf import settings
-from django.core.files.uploadedfile import SimpleUploadedFile
 
 from posts.models import Group, Post, User
 
@@ -196,7 +196,8 @@ class TaskPagesTests(TestCase):
         templates = {
             reverse('posts:index'),
             reverse('posts:group_lists', kwargs={
-                    'slug': self.post.group.slug}),
+                    'slug': self.post.group.slug
+                    }),
             reverse('posts:profile', kwargs={'username': self.post.author}),
         }
         for template in templates:

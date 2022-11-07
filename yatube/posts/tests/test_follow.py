@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from posts.models import Group, Post, User, Follow, Comment
+from posts.models import Comment, Follow, Group, Post, User
 
 User = get_user_model()
 
@@ -49,9 +49,7 @@ class FollowTest(TestCase):
         self.authorized_client.get(
             reverse('posts:profile_follow', kwargs={'username': self.user_2})
         )
-        follow = Follow.objects.filter(
-            user=self.user_1, author=self.user_2
-        ).last()
+        follow = Follow.objects.last()
         self.assertEqual(Follow.objects.count(), follow_count + 1)
         self.assertEqual(follow.user, self.user_1)
 
@@ -66,3 +64,14 @@ class FollowTest(TestCase):
             reverse('posts:follow_index')
         )
         self.assertIn(post, response.context['page_obj'])
+
+    def test_unfollow_user(self):
+        """"Тест отписки пользователя"""
+        Follow.objects.create(user=self.user_1, author=self.user_2)
+        follow_count = Follow.objects.count()
+        self.authorized_client.get(
+            reverse('posts:profile_unfollow', kwargs={'username': self.user_2})
+        )
+        follow = Follow.objects.last()
+        self.assertEqual(Follow.objects.count(), follow_count - 1)
+        self.assertNotEqual(follow.user, self.user_1)

@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
 
 User = get_user_model()
 
@@ -35,11 +35,13 @@ class Post(models.Model):
         on_delete=models.CASCADE,
         related_name='posts',
         verbose_name='Автор',
+        help_text='Укажите автора данного поста'
     )
     image = models.ImageField(
         verbose_name='Картинка',
         upload_to='posts/',
-        blank=True
+        blank=True,
+        help_text='Вставьте изображение'
     )
 
     class Meta:

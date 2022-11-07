@@ -1,7 +1,6 @@
-from http import HTTPStatus
-
 import shutil
 import tempfile
+from http import HTTPStatus
 
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -9,7 +8,7 @@ from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 
 from posts.forms import PostForm
-from posts.models import User, Group, Post
+from posts.models import Group, Post, User
 
 TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
 
@@ -113,9 +112,7 @@ class PostCreateFormTests(TestCase):
             data=form_data,
             follow=True
         )
+        new_post = Post.objects.first()
         self.assertEqual(Post.objects.count(), posts_count + 1)
-        self.assertTrue(
-            Post.objects.filter(
-                text='Тест',
-                image='posts/small.gif'
-            ).exists())
+        self.assertEqual(new_post.text, form_data['text'])
+        self.assertEqual(new_post.image, 'posts/small.gif')
