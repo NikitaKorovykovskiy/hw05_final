@@ -116,3 +116,5 @@ class PostCreateFormTests(TestCase):
         self.assertEqual(Post.objects.count(), posts_count + 1)
         self.assertEqual(new_post.text, form_data['text'])
         self.assertEqual(new_post.image, 'posts/small.gif')
+        self.assertEqual(new_post.group, self.post.group)
+        self.assertEqual(new_post.author, self.post.author)

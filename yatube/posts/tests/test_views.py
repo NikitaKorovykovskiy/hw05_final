@@ -196,8 +196,8 @@ class TaskPagesTests(TestCase):
         templates = {
             reverse('posts:index'),
             reverse('posts:group_lists', kwargs={
-                    'slug': self.post.group.slug
-                    }),
+                'slug': self.post.group.slug
+            }),
             reverse('posts:profile', kwargs={'username': self.post.author}),
         }
         for template in templates:

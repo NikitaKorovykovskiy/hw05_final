@@ -67,7 +67,7 @@ class FollowTest(TestCase):
 
     def test_unfollow_user(self):
         """"Тест отписки пользователя"""
-        Follow.objects.create(user=self.user_1, author=self.user_2)
+        first = Follow.objects.create(user=self.user_1, author=self.user_2)
         follow_count = Follow.objects.count()
         self.authorized_client.get(
             reverse('posts:profile_unfollow', kwargs={'username': self.user_2})
@@ -75,3 +75,4 @@ class FollowTest(TestCase):
         follow = Follow.objects.last()
         self.assertEqual(Follow.objects.count(), follow_count - 1)
         self.assertNotEqual(follow.user, self.user_1)
+        self.assertNotIn(first, Follow.objects.all())

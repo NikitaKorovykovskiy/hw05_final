@@ -30,8 +30,6 @@ class PostModelTest(TestCase):
         )
         Post.objects.filter(text='Текс исходный', author=self.user).delete()
         self.assertEqual(response.context.get('page_obj')[0], self.post)
-        cache.clear()
-        self.assertIsNot(response.context.get('page_obj')[0], self.post)
 
     def test_cache_change(self):
         """Тестирования изменения кеша"""
